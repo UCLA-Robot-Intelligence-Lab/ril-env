@@ -211,8 +211,8 @@ class XArm:
             raise RuntimeError(f"Error getting TCP pose: code {code}")
         state["ActualTCPPose"] = actual_pose
 
-        actual_tcp_speed = self.arm.realtime_tcp_speed()
-        state["ActualTCPSpeed"] = actual_tcp_speed
+        tcp_speed_attr = self.arm.realtime_tcp_speed
+        state["ActualTCPSpeed"] = tcp_speed_attr() if callable(tcp_speed_attr) else tcp_speed_attr
 
         code, actual_angles = self.arm.get_servo_angle(is_radian=False)
         if code != 0:
@@ -220,8 +220,8 @@ class XArm:
             raise RuntimeError(f"Error getting joint angles: code {code}")
         state["ActualQ"] = actual_angles
 
-        actual_joint_speeds = self.arm.realtime_joint_speeds()
-        state["ActualQd"] = actual_joint_speeds
+        joint_speeds_attr = self.arm.realtime_joint_speeds
+        state["ActualQd"] = joint_speeds_attr() if callable(joint_speeds_attr) else joint_speeds_attr
 
         return state
 
